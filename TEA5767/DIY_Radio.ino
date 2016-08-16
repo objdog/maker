@@ -16,7 +16,7 @@ boolean mode;
 volatile boolean TurnDetected;
 volatile boolean down; //change from original to match American convention (clockwise = up)
 
-byte customChar[8] = {  //creates the arrow 
+byte customChar[8] = {  //creates the arrow
   0b10000,
   0b11000,
   0b11100,
@@ -29,7 +29,7 @@ byte customChar[8] = {  //creates the arrow
 
 void isr0 ()  {
   TurnDetected = true;
-  down = (digitalRead(dt) == digitalRead(clk)); //Changed the rotary encoder direction -- I think this may be a German preference.
+  down = (digitalRead(clk) == digitalRead(dt)); //Changed the rotary encoder direction -- I think this may be a German preference.
 }
 
 void setFrequency()  {
@@ -42,8 +42,8 @@ void setFrequency()  {
   Wire.write(0xB0);
   Wire.write(0x10);
   Wire.write((byte)0x00);
-  Wire.endTransmission(); 
-} 
+  Wire.endTransmission();
+}
 
 void setVolume() {
  digitalWrite(cs, LOW);
@@ -60,7 +60,7 @@ void displaydata(){
  lcd.print("Vol:");
  lcd.print(100-Vol*100/255);
  lcd.print("%");
-} 
+}
 
 void arrow(){
  lcd.begin(16, 2);
@@ -69,7 +69,7 @@ void arrow(){
    lcd.write((uint8_t)0);}
  else{
    lcd.setCursor(0,1);
-   lcd.write((uint8_t)0);} 
+   lcd.write((uint8_t)0);}
 }
 
 void setup() {
@@ -78,7 +78,7 @@ void setup() {
   lcd.begin(16, 2);
   pinMode(cs,OUTPUT);
   pinMode(clk,INPUT);
-  pinMode(dt,INPUT);  
+  pinMode(dt,INPUT);
   pinMode(sw,INPUT);
   mode = 1; //frequency mode
   lcd.createChar(0, customChar); // arrow Char created
@@ -97,14 +97,14 @@ void loop() {
     arrow();
     displaydata();
     delay(500);}
-    
+
   if (TurnDetected && mode == 1){ //changed to make the rotary dial match the American convention (clockwise = up)
     if(down){
       if (frequency <= 87.6){
         setFrequency();
         arrow();
         displaydata();}
-      else{   
+      else{
       frequency = frequency - 0.1;
       setFrequency();
       arrow();
@@ -115,7 +115,7 @@ void loop() {
         arrow();
         displaydata();}
       else{
-      frequency = frequency - 0.1;
+      frequency = frequency + 0.1;
       setFrequency();
       arrow();
       displaydata();}}
@@ -146,12 +146,5 @@ void loop() {
       arrow();
       displaydata();}}
       TurnDetected = false;
-    }   
+    }
   }
-
-
-    
-  
- 
-
-

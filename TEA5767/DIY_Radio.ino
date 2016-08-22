@@ -92,6 +92,7 @@ void setup() {
 }
 
 void loop() {
+  arrow(); //Added additional arrow call... For some reason the arrow is corrupting occasionally.
   if (!(digitalRead(sw))){
     mode=!mode;
     arrow();
@@ -122,11 +123,11 @@ void loop() {
       TurnDetected = false;
     }
 
-  if (TurnDetected && mode == 0){
+  if (TurnDetected && mode == 0){ //Updated volume to encode properly.
     if(down){
-      Vol = Vol - 10;
-      if (Vol <= 0){
-        Vol = 0;
+      Vol = Vol + 10;
+      if (Vol >= 255){
+        Vol = 255;
         setVolume();
         arrow();
         displaydata();}
@@ -135,9 +136,9 @@ void loop() {
       arrow();
       displaydata();}}
     else{
-      Vol = Vol + 10;
-      if (Vol >= 255){
-        Vol = 255;
+      Vol = Vol - 10;
+      if (Vol <= 0){
+        Vol = 0;
         setVolume();
         arrow();
         displaydata();}
